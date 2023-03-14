@@ -1,0 +1,146 @@
+@import '../style.css';
+@import '../reset.css';
+
+body{
+    overflow: hidden;
+}
+
+.pokemonPage{
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(rgba(59,153,59,1) 0%, rgb(7, 73, 7) 100%);
+    display: flex;
+    justify-content: center;
+}
+
+.pokemonPage__separar{
+    width: 90%;
+    position: relative;
+}
+
+.pokemonPage__header{
+    display: flex;
+    justify-content: space-between;
+    color: var(--branco);
+    font-size: 50px;
+    position: relative;
+    margin-top: 30px;
+}
+
+.pokemonPage__header h2, .pokemonPage__header span {
+    animation: opacidade 2s;
+    text-transform: capitalize;
+} 
+
+.pokemonPage__header .pokebola{
+    position: absolute;
+    right: 0;
+    top: 10vh;
+    width: 300px;
+}
+
+.pokemonPage__pokemon{
+    width: 100%;
+    background-color: var(--branco);
+    height: 50vh;
+    position: absolute;
+    bottom: 0;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    animation: opacidade 2s;
+}
+
+.pokemonPage__pokemon img {
+    width: 300px;
+    position: absolute;
+    top: -20vh;
+}
+
+
+.valorMaximo {
+    width: 40vw;
+    height: 8px;
+    background-color: rgba(59, 153, 59, 0.5);
+    border-radius: 16px;
+}
+
+.valores {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    margin-bottom: 20px;
+}
+
+.valorMaximo .valorAtual {
+    width: 40%;
+    height: 8px;
+    background-color: rgba(59,153,59,1);
+    border-radius: 16px;
+    animation: atributosAumenta 3s;
+}
+
+.pokemon__btn{
+    padding: 8px 16px;
+    background: var(--btn);
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--branco);
+    margin-bottom: 50px;
+    transition: .1s;
+}
+
+.HP, .ATK, .DEF, .SATK, .SDEF, .SPD{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.stats {
+    width: 80px;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+
+.pokemon__btn:hover{
+    scale: 1.05;
+}
+
+@keyframes atributosAumenta{
+    from{
+        width: 0;
+    }
+    to{
+        width: 1;
+    }
+}
+
+@media screen and (max-width:590px) {
+    .pokemonPage__pokemon{
+        height: 65vh;
+        justify-content: center;
+    }
+    .pokemonPage__pokemon img{
+        width: 200px;
+        top: -20vh;
+    }
+    .pokemonPage__header .pokebola{
+        width: 200px;
+    }
+    .pokemonPage__header{
+        font-size: 20px;
+        margin-top: 20px;
+    }
+    .valorMaximo {
+        width: 60vw;
+    }
+    .HP, .ATK, .DEF, .SATK, .SDEF, .SPD{
+        display: block;
+    }
+    .stats {
+        display: block;
+    }
+}

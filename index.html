@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex</title>
+    <link rel="shortcut icon" href="/imagens/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="/styles/paginaInicial/indexPage.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="pokebola">
+            <img class='pokebola1' src="/imagens/pokeball.png">
+            <img class='pokebola2' src="/imagens/pokeball.png">
+        </div>
+        <div class="divisorHeader">
+            <h1 class="titulo">Pokédex</h1>
+            <div class="informacoes">
+                <div class="informacoes__numeroTipos">
+                    <span class="numero">#101</span>
+                    <div class="tipos__rayquaza">
+                        <span style="background-color: var(--dragon)">Dragon</span>
+                        <span style="background-color: var(--flying)">Flying</span>
+                    </div>
+                </div>
+                <h2>Rayquaza</h2>
+                <p>Rayquaza é um lendário Pokémon do tipo Dragão/Voador conhecido por sua aparência icônica e poderosos ataques. Ele é considerado um dos Pokémon mais poderosos do jogo e é o governante dos outros lendários da região de Hoenn. Com sua presença muitas vezes associada a conflitos entre outros lendários, Rayquaza é uma escolha popular entre jogadores competitivos de Pokémon.</p>
+                <a href="/pages/info.html">Ver detalhes</a>
+            </div>
+            <div class="center">
+                <div class="linha"></div>
+                <img src="../imagens/Dragon-Type-Pokemon-Sword-and-Shield.svg" alt="dragão">
+                <div class="linha"></div>
+            </div>
+            <div>
+                <img class='ray' src="/imagens/Mega Rayquaza.png" alt="Mega Rayquaza">
+            </div>
+        </div>
+        <svg class='vector' width="1920px" viewBox="0 0 965 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M965.5 94H0V0.5H352.046C372.831 0.5 393.1 6.97672 410.033 19.0296L442.967 42.4704C459.9 54.5233 480.169 61 500.954 61H965.5V94Z" fill="#F5F5F5"/>
+        </svg>
+    </header>
+    <section class="ListaDePokemons">
+            <div class="alinhar">
+                <div class="procurarPokemon">
+                    <div class="tipos">
+                        <div class="arrumarBtn">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper">
+                                <div class="swiper-wrapper">
+                                </div>
+                            </div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                    <input class="pesquisa" type="text" placeholder="Search Pokémon..." data-pesquisa>
+                </div>
+                <ul class="pokemons" data-pokemons>
+                    <li class="card">
+                        <div class="fundo" style="background-color: #F85888">
+                            <div class="NameId">
+                                <h1>Mewtwo</h1>
+                                <span>#001</span>
+                            </div>
+                            <img src="../imagens/pokemon1.png" alt="pokemon">
+                        </div>
+                        <div class="infoCard">
+                            <span style="background-color: #F85888">Psychic</span>
+                        </div>
+                        <a href="../pages/info.html">Ver detalhes</a>
+                    </li>
+                    <li class="card">
+                        <div class="fundo" style="background-color: #F08030">
+                            <div class="NameId">
+                                <h1>Charizard</h1>
+                                <span>#002</span>
+                            </div>
+                            <img src="../imagens/pokemon2.png" alt="pokemon">
+                        </div>
+                        <div class="infoCard">
+                            <span style="background-color: #F08030">Fire</span>
+                            <span style="background-color: #7038F8">Dragon</span>
+                        </div>
+                        <a href="../pages/info.html">Ver detalhes</a>
+                    </li>
+                    <li class="card">
+                        <div class="fundo" style="background-color: #F8D030">
+                            <div class="NameId">
+                                <h1>Pikachu</h1>
+                                <span>#003</span>
+                            </div>
+                            <img src="../imagens/pikachu.png" style="height: 110px; width: 100px" alt="pokemon">
+                        </div>
+                        <div class="infoCard">
+                            <span style="background-color: #F8D030">Eletric</span>
+                        </div>
+                        <a href="../pages/info.html">Ver detalhes</a>
+                    </li>
+                    <li class="card">
+                        <div class="fundo" style="background-color: #6890F0">
+                            <div class="NameId">
+                                <h1>Greninja</h1>
+                                <span>#004</span>
+                            </div>
+                            <img src="../imagens/pokemon4.png" alt="pokemon">
+                        </div>
+                        <div class="infoCard">
+                            <span style="background-color: #6890F0">Water</span>
+                            <span style="background-color: #705848">Dark</span>
+                        </div>
+                        <a href="../pages/info.html">Ver detalhes</a>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            <div class="botoes-prev-next">
+                <button class="prev-button">Anterior</button>
+                <button class="next-button">Proxima</button>
+            </div>
+    </section>
+    <footer class="footer">
+        <svg class='vector2' viewBox="0 0 965 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0.5L965.5 0.5V94L613.454 94C592.669 94 572.4 87.5233 555.467 75.4704L522.533 52.0296C505.6 39.9767 485.331 33.5 464.546 33.5L0 33.5V0.5Z" fill="#F5F5F5"/>
+        </svg>
+        <div class="footer__info">
+            <i>&copy; 2023 Nicolas Andrei Da Silva</i>
+            <div class="footer__links">
+                <a class="footer__btn" href="https://github.com/NicolasAndreiDev">
+                    GitHub
+                <img class='icons'src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+                </a>
+                <a class="footer__btn" href="https://www.linkedin.com/in/nicolas-andrei-da-silva-186a8a251">
+                    Linkedin
+                <img class='icons' src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" />
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script src="script/carrousel.js" type="module"></script>
+    <script src='script/main.js' type="module"></script>
+</body>
+</html>
