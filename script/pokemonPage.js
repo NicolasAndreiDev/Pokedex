@@ -52,31 +52,20 @@ const renderPokemon = async () => {
         element.style.backgroundColor = `rgba(${attributeColor}, 0.3)`
     })
     
-    const maxStatValue = 100;
 
     backGround.style.background = color[pokemonType];
     nomePokemon.innerHTML = pokemons.name;
     idPokemon.innerHTML = `#${pokemons.id}`;
     imgPokemon.src = pokemons['sprites']['other']['home']['front_default'];
-    const HP = pokemons.stats.find(stat => stat.stat.name === 'hp').base_stat;
-    const ATK = pokemons.stats.find(stat => stat.stat.name === 'attack').base_stat;
-    const DEF = pokemons.stats.find(stat => stat.stat.name === 'defense').base_stat;
-    const SATK = pokemons.stats.find(stat => stat.stat.name === 'special-attack').base_stat;
-    const SDEF = pokemons.stats.find(stat => stat.stat.name === 'special-defense').base_stat;
-    const SPD = pokemons.stats.find(stat => stat.stat.name === 'speed').base_stat;
+    const stats = ['hp', 'attack', 'defense', 'special-attack', 'special-defense', 'speed'];
+    const maxStatValue = 100;
 
-    statsValor[0].innerHTML = HP > maxStatValue ? maxStatValue : HP;
-    valorAtual[0].style.width = `${HP > maxStatValue ? maxStatValue : HP}%`
-    statsValor[1].innerHTML = ATK > maxStatValue ? maxStatValue : ATK;
-    valorAtual[1].style.width = `${ATK > maxStatValue ? maxStatValue : ATK}%`
-    statsValor[2].innerHTML = DEF > maxStatValue ? maxStatValue : DEF;
-    valorAtual[2].style.width = `${DEF > maxStatValue ? maxStatValue : DEF}%`
-    statsValor[3].innerHTML = SATK > maxStatValue ? maxStatValue : SATK;
-    valorAtual[3].style.width = `${SATK > maxStatValue ? maxStatValue : SATK}%`
-    statsValor[4].innerHTML = SDEF > maxStatValue ? maxStatValue : SDEF;
-    valorAtual[4].style.width = `${SDEF > maxStatValue ? maxStatValue : SDEF}%`
-    statsValor[5].innerHTML = SPD > maxStatValue ? maxStatValue : SPD;
-    valorAtual[5].style.width = `${SPD > maxStatValue ? maxStatValue : SPD}%`
+    for (let i = 0; i < stats.length; i++) {
+        const statValue = pokemons.stats.find(stat => stat.stat.name === stats[i]).base_stat;
+        const formattedStatValue = statValue > maxStatValue ? maxStatValue : statValue;
+        statsValor[i].innerHTML = formattedStatValue;
+        valorAtual[i].style.width = `${formattedStatValue}%`;
+    }
 
     statsValor.forEach((element) => {
         if (element.innerHTML === '100') {
