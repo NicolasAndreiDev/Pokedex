@@ -31,7 +31,7 @@ prev.addEventListener('click', () => {
     offset -= 12;
     removeChildNodes(ul)
     fetchPokemon(limit, offset)
-    window.scrollTo(0, 550);
+    window.scrollTo({top: 550, behavior: 'smooth'});
   }
 })
 
@@ -39,7 +39,7 @@ next.addEventListener('click', () => {
   removeChildNodes(ul)
   offset += 12;
   fetchPokemon(limit, offset)
-  window.scrollTo(0, 550);
+  window.scrollTo({top: 550, behavior: 'smooth'});
 })
 
 export const fetchPokemon = (limit, offset) => {

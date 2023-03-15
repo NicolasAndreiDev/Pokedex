@@ -49,6 +49,7 @@
 .NameId h1 {
 	font-size: 24px;
 	font-weight: 700;
+	text-transform: capitalize;
 }
 
 .infoCard{

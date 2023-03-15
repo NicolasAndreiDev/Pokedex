@@ -4,3 +4,11 @@
 @import 'header.css';
 @import 'section.css';
 @import 'footer.css';
+
+body::-webkit-scrollbar {
+    width: 12px;      
+}
+  
+body::-webkit-scrollbar-thumb {
+    background: rgba(59,153,59,1);       
+}
