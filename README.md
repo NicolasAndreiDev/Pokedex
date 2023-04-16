@@ -1,4 +1,4 @@
-# Pokedex
+# Pokédex
 
 Tecnologias e ferramentas utilizadas:
 
