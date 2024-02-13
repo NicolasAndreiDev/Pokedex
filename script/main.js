@@ -42,20 +42,31 @@ next.addEventListener('click', () => {
   window.scrollTo({top: 550, behavior: 'smooth'});
 })
 
-export const fetchPokemon = (limit, offset) => {
+export const fetchPokemon = async (limit, offset, type = null) => {
     const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`
 
     const pokemonPromises = []
 
-    for (let i = offset; i <= limit + offset; i++) {
-        pokemonPromises.push(fetch(getPokemonUrl(i)).then(response => response.json()))
+    if (type !== null) {
+        await fetch(`https://pokeapi.co/api/v2/type/${type}`).then(response => response.json()).then(data => {
+          data.pokemon.slice(offset, limit + offset + 1).forEach(pokemon => {
+            console.log(pokemon.pokemon.url);
+            pokemonPromises.push(fetch(pokemon.pokemon.url).then(response => response.json()))
+          })
+        })
+    } else {
+      for (let i = offset; i <= limit + offset; i++) {
+          pokemonPromises.push(fetch(getPokemonUrl(i)).then(response => response.json()))
+      }
     }
+
+    console.log(pokemonPromises);
 
     Promise.all(pokemonPromises)
     .then(pokemons => {
         
         const lisPokemons = pokemons.reduce((accumulator, pokemon) => {
-            
+            console.log("aqui!");
             const types = pokemon.types.map(typeInfo => {
                 const typeName = typeInfo.type.name
                 const typeColor = colors[typeName]
@@ -140,5 +151,5 @@ function removeChildNodes(element) {
   element.style = 'none';
 }
 
-fetchPokemon(limit, offset)
+fetchPokemon(limit, offset, 2);
 
