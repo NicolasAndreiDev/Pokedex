@@ -82,14 +82,34 @@ body{
 	font-weight: bold;
 }
 
+.button-clear-type{
+	padding: 16px 40px;
+	background: var(--btn);
+	border-radius: 100px;
+	color: var(--branco);
+	position: absolute;
+	left: 200px;
+	border: none;
+	font-size: 20px;
+	font-family: 'Times New Roman';
+	cursor: pointer;
+	transition: .1s;
+}
+
+.button-clear-type:hover{
+	scale: 1.05;
+}
+
 .prev-button, .next-button{
 	border: none;
-	padding: 12px 24px;
+	padding: 16px 24px;
 	cursor: pointer;
 	border-radius: 24px;
 	background: var(--btn);
 	color: var(--branco);
 	transition: .1s;
+	font-size: 20px;
+	font-family: 'Times New Roman';
 }
 
 .prev-button:hover, .next-button:hover {
@@ -104,6 +124,9 @@ body{
 
 @media screen and (max-width:1700px) {
 	.arrumarBtn {
+		position: static;
+	}
+	.button-clear-type{
 		position: static;
 	}
 }

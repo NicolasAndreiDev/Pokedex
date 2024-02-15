@@ -17,63 +17,79 @@ const colors = {
     dark: '#705848',
     steel: '#B8B8D0',
     fairy: '#EE99AC',
-}
+};
 
-const ul = document.querySelector('.pokemons')
-const prev = document.querySelector('.prev-button')
-const next = document.querySelector('.next-button')
+const types = [
+    { name: 'normal', num: 1 },
+    { name: 'fighting', num: 2 },
+    { name: 'flying', num: 3 },
+    { name: 'poison', num: 4 },
+    { name: 'ground', num: 5 },
+    { name: 'rock', num: 6 },
+    { name: 'bug', num: 7 },
+    { name: 'ghost', num: 8 },
+    { name: 'steel', num: 9 },
+    { name: 'fire', num: 10 },
+    { name: 'water', num: 11 },
+    { name: 'grass', num: 12 },
+    { name: 'electric', num: 13 },
+    { name: 'psychic', num: 14 },
+    { name: 'ice', num: 15 },
+    { name: 'dragon', num: 16 },
+    { name: 'dark', num: 17 },
+    { name: 'fairy', num: 18 },
+];
 
-let offset = 1
-let limit = 11
+const ul = document.querySelector('.pokemons');
+const prev = document.querySelector('.prev-button');
+const next = document.querySelector('.next-button');
+
+let offset = 1, limit = 11, typeNumber = null;
 
 prev.addEventListener('click', () => {
   if(offset != 1) {
     offset -= 12;
     removeChildNodes(ul)
-    fetchPokemon(limit, offset)
+    fetchPokemon(limit, offset, typeNumber)
     window.scrollTo({top: 550, behavior: 'smooth'});
   }
-})
+});
 
 next.addEventListener('click', () => {
   removeChildNodes(ul)
   offset += 12;
-  fetchPokemon(limit, offset)
+  fetchPokemon(limit, offset, typeNumber)
   window.scrollTo({top: 550, behavior: 'smooth'});
-})
+});
 
 export const fetchPokemon = async (limit, offset, type = null) => {
-    const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`
+    const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`;
 
-    const pokemonPromises = []
+    const pokemonPromises = [];
 
     if (type !== null) {
         await fetch(`https://pokeapi.co/api/v2/type/${type}`).then(response => response.json()).then(data => {
           data.pokemon.slice(offset, limit + offset + 1).forEach(pokemon => {
-            console.log(pokemon.pokemon.url);
-            pokemonPromises.push(fetch(pokemon.pokemon.url).then(response => response.json()))
-          })
-        })
+            pokemonPromises.push(fetch(pokemon.pokemon.url).then(response => response.json()));
+          });
+        });
     } else {
       for (let i = offset; i <= limit + offset; i++) {
-          pokemonPromises.push(fetch(getPokemonUrl(i)).then(response => response.json()))
+          pokemonPromises.push(fetch(getPokemonUrl(i)).then(response => response.json()));
       }
     }
-
-    console.log(pokemonPromises);
 
     Promise.all(pokemonPromises)
     .then(pokemons => {
         
         const lisPokemons = pokemons.reduce((accumulator, pokemon) => {
-            console.log("aqui!");
             const types = pokemon.types.map(typeInfo => {
-                const typeName = typeInfo.type.name
-                const typeColor = colors[typeName]
+                const typeName = typeInfo.type.name;
+                const typeColor = colors[typeName];
                 return `<span style="background-color: ${typeColor}">${typeName}</span>`
-            }).join('')
+            }).join('');
 
-            const firstTypeColor = colors[pokemon.types[0].type.name]
+            const firstTypeColor = colors[pokemon.types[0].type.name];
 
             accumulator += `<li class="card">
             <div class="fundo" style="background-color: ${firstTypeColor}">
@@ -91,65 +107,69 @@ export const fetchPokemon = async (limit, offset, type = null) => {
             return accumulator
         }, '') 
 
-        ul.innerHTML = lisPokemons
+        ul.innerHTML = lisPokemons;
     })
 }
 
-const carousel = document.querySelector('.swiper-wrapper')
+const carousel = document.querySelector('.swiper-wrapper');
 
 for (const type in colors) {
+  const slide = document.createElement('div');
+  slide.classList.add('swiper-slide');
 
-  const slide = document.createElement('div')
-  slide.classList.add('swiper-slide')
+  const header = document.createElement('h2');
+  header.textContent = type;
 
-  const header = document.createElement('h2')
-  header.textContent = type
-
-  header.style.backgroundColor = colors[type]
+  header.style.backgroundColor = colors[type];
   
-  slide.appendChild(header)
-  carousel.appendChild(slide)
+  slide.appendChild(header);
+  carousel.appendChild(slide);
 }
 
-const searchInput = document.querySelector('[data-pesquisa]')
+const searchInput = document.querySelector('[data-pesquisa]');
 
 searchInput.addEventListener('keyup', () => {
-  const searchTerm = searchInput.value.toLowerCase()
-  const pokemonCards = document.querySelectorAll('.card')
+  const searchTerm = searchInput.value.toLowerCase();
+  const pokemonCards = document.querySelectorAll('.card');
 
   pokemonCards.forEach(card => {
-    const pokemonName = card.querySelector('h1').textContent
+    const pokemonName = card.querySelector('h1').textContent;
     
-    if (pokemonName.includes(searchTerm)) {
-      card.style.display = 'flex'
-    } else {
-      card.style.display = 'none'
-    }
+    if (pokemonName.includes(searchTerm)) card.style.display = 'flex';
+    else card.style.display = 'none';
+  });
+})
+
+const slides = document.querySelectorAll('.swiper-slide');
+
+slides.forEach(slide => {
+  const type = slide.querySelector('h2').textContent.toLowerCase();
+  
+  slide.addEventListener('click', () => {
+    typeNumber = types.find((AllTypes) => AllTypes.name === type).num;
+    offset = 1;
+    fetchPokemon(limit, offset, typeNumber);
+    const pokemonCards = document.querySelectorAll('.card');
+    pokemonCards.forEach(card => {
+      const types = Array.from(card.querySelectorAll('span')).map(span => span.textContent.toLowerCase());
+      
+      if (types.includes(type)) card.style.display = 'flex';
+      else card.style.display = 'none';
+    })
   })
 })
 
-const slides = document.querySelectorAll('.swiper-slide')
-
-slides.forEach(slide => {
-  const type = slide.querySelector('h2').textContent.toLowerCase()
-  
-  slide.addEventListener('click', () => {
-    const pokemonCards = document.querySelectorAll('.card')
-    pokemonCards.forEach(card => {
-      const types = Array.from(card.querySelectorAll('span')).map(span => span.textContent.toLowerCase())
-      
-      if (types.includes(type)) {
-        card.style.display = 'flex'
-      } else {
-        card.style.display = 'none'
-      }
-    })
-  })
+const clearType = document.querySelector(".button-clear-type");
+clearType.addEventListener("click", () => {
+  if(typeNumber != null) {
+    offset = 1, typeNumber = null;
+    fetchPokemon(limit, offset, typeNumber);
+  }
 })
 
 function removeChildNodes(element) {
   element.style = 'none';
 }
 
-fetchPokemon(limit, offset, 2);
+fetchPokemon(limit, offset, typeNumber);
 
