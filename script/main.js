@@ -46,7 +46,7 @@ const next = document.querySelector('.next-button');
 
 let offset = 1, limit = 11, typeNumber = null;
 
-prev.addEventListener('click', () => {
+prev.addEventListener('click', async () => {
   if(offset != 1) {
     offset -= 12;
     removeChildNodes(ul)
@@ -55,60 +55,73 @@ prev.addEventListener('click', () => {
   }
 });
 
-next.addEventListener('click', () => {
-  removeChildNodes(ul)
-  offset += 12;
-  fetchPokemon(limit, offset, typeNumber)
-  window.scrollTo({top: 550, behavior: 'smooth'});
+next.addEventListener('click', async () => {
+  let pokemons = await fetchPokemon(limit, offset, typeNumber);
+  
+  if(pokemons && pokemons.length != 0) {
+    offset += 12;
+    removeChildNodes(ul);
+    await fetchPokemon(limit, offset, typeNumber);
+    pokemons = await fetchPokemon(limit, offset, typeNumber);
+    window.scrollTo({top: 550, behavior: 'smooth'});
+    if(pokemons.length == 0) {
+      offset -= 12;
+      removeChildNodes(ul);
+      fetchPokemon(limit, offset, typeNumber);
+    } 
+  }
 });
 
+
 export const fetchPokemon = async (limit, offset, type = null) => {
-    const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`;
+  const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`;
+  
+  const pokemonPromises = [];
 
-    const pokemonPromises = [];
-
-    if (type !== null) {
-        await fetch(`https://pokeapi.co/api/v2/type/${type}`).then(response => response.json()).then(data => {
-          data.pokemon.slice(offset, limit + offset + 1).forEach(pokemon => {
-            pokemonPromises.push(fetch(pokemon.pokemon.url).then(response => response.json()));
-          });
-        });
-    } else {
-      for (let i = offset; i <= limit + offset; i++) {
-          pokemonPromises.push(fetch(getPokemonUrl(i)).then(response => response.json()));
-      }
+  if (type !== null) {
+    await fetch(`https://pokeapi.co/api/v2/type/${type}`).then(response => response.json()).then(data => {
+      data.pokemon.slice(offset, limit + offset + 1).forEach(pokemon => {
+        pokemonPromises.push(fetch(pokemon.pokemon.url).then(response => response.json()));
+      });
+    });
+  } else {
+    for (let i = offset; i <= limit + offset; i++) {
+      pokemonPromises.push(fetch(getPokemonUrl(i)).then(response => response.json()));
     }
+  }
+  
+  Promise.all(pokemonPromises)
+  .then(pokemons => {
+    
+    const lisPokemons = pokemons.reduce((accumulator, pokemon) => {
+      const types = pokemon.types.map(typeInfo => {
+        const typeName = typeInfo.type.name;
+        const typeColor = colors[typeName];
+        return `<span style="background-color: ${typeColor}">${typeName}</span>`
+      }).join('');
+      
+      const firstTypeColor = colors[pokemon.types[0].type.name];
+      
+      accumulator += `<li class="card">
+      <div class="fundo" style="background-color: ${firstTypeColor}">
+      <div class="NameId">
+      <h1>${pokemon.name}</h1>
+      <span>#${pokemon.id}</span>
+      </div>
+      <img src=${pokemon['sprites']['other']['home']['front_default']} alt="pokemon">
+      </div>
+      <div class="infoCard">
+      ${types}
+      </div>
+      <a href="../pages/pokemon.html?id=${pokemon.id}">Ver detalhes</a>
+      </li>`
+      return accumulator
+    }, '') 
+  
+    ul.innerHTML = lisPokemons;
+  })
 
-    Promise.all(pokemonPromises)
-    .then(pokemons => {
-        
-        const lisPokemons = pokemons.reduce((accumulator, pokemon) => {
-            const types = pokemon.types.map(typeInfo => {
-                const typeName = typeInfo.type.name;
-                const typeColor = colors[typeName];
-                return `<span style="background-color: ${typeColor}">${typeName}</span>`
-            }).join('');
-
-            const firstTypeColor = colors[pokemon.types[0].type.name];
-
-            accumulator += `<li class="card">
-            <div class="fundo" style="background-color: ${firstTypeColor}">
-                <div class="NameId">
-                    <h1>${pokemon.name}</h1>
-                    <span>#${pokemon.id}</span>
-                </div>
-                <img src=${pokemon['sprites']['other']['home']['front_default']} alt="pokemon">
-            </div>
-            <div class="infoCard">
-                ${types}
-            </div>
-            <a href="../pages/pokemon.html?id=${pokemon.id}">Ver detalhes</a>
-        </li>`
-            return accumulator
-        }, '') 
-
-        ul.innerHTML = lisPokemons;
-    })
+  return pokemonPromises;
 }
 
 const carousel = document.querySelector('.swiper-wrapper');
@@ -116,10 +129,10 @@ const carousel = document.querySelector('.swiper-wrapper');
 for (const type in colors) {
   const slide = document.createElement('div');
   slide.classList.add('swiper-slide');
-
+  
   const header = document.createElement('h2');
   header.textContent = type;
-
+  
   header.style.backgroundColor = colors[type];
   
   slide.appendChild(header);
@@ -128,14 +141,28 @@ for (const type in colors) {
 
 const searchInput = document.querySelector('[data-pesquisa]');
 
-searchInput.addEventListener('keyup', () => {
-  const searchTerm = searchInput.value.toLowerCase();
+searchInput.addEventListener('keyup', async () => {
+  typeNumber = null;
+  const searchTerm = await searchInput.value.toLowerCase();
   const pokemonCards = document.querySelectorAll('.card');
+  const pokemonByName = async () => {
+    await fetchPokemon(limit, offset, typeNumber);
+  }
+  
+  if(searchTerm != "" && limit != 1000) {
+    limit = 1000;
+    await pokemonByName();
+  } 
 
+  if(searchTerm == "") {
+    limit = 11;
+    await pokemonByName();
+  }
+  
   pokemonCards.forEach(card => {
     const pokemonName = card.querySelector('h1').textContent;
     
-    if (pokemonName.includes(searchTerm)) card.style.display = 'flex';
+    if (pokemonName.startsWith(searchTerm)) card.style.display = 'flex';
     else card.style.display = 'none';
   });
 })
@@ -147,7 +174,7 @@ slides.forEach(slide => {
   
   slide.addEventListener('click', () => {
     typeNumber = types.find((AllTypes) => AllTypes.name === type).num;
-    offset = 1;
+    limit = 11, offset = 1;
     fetchPokemon(limit, offset, typeNumber);
     const pokemonCards = document.querySelectorAll('.card');
     pokemonCards.forEach(card => {
@@ -162,7 +189,7 @@ slides.forEach(slide => {
 const clearType = document.querySelector(".button-clear-type");
 clearType.addEventListener("click", () => {
   if(typeNumber != null) {
-    offset = 1, typeNumber = null;
+    limit = 11, offset = 1, typeNumber = null;
     fetchPokemon(limit, offset, typeNumber);
   }
 })
@@ -172,4 +199,3 @@ function removeChildNodes(element) {
 }
 
 fetchPokemon(limit, offset, typeNumber);
-
